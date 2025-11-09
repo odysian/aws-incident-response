@@ -3,3 +3,46 @@
 ## Project Status: In Progress
 
 Building systematic troubleshooting skills through hands-on incident response scenarios.
+
+## Overview
+This project simulates real-world AWS production incidents to develop and demonstrate operational troubleshooting capabilities. Each incident includes:
+- Intentional system failure
+- Systematic investigation process
+- Root cause analysis
+- Resolution and verification
+- Detailed incident documentation
+
+## Infrastructure
+Using existing multi-tier AWS environment from Week 1:
+- VPC with multi-AZ subnets
+- Application Load Balancer
+- Auto Scaling Group (2-4 instances)
+- RDS MySQL database
+- CloudWatch monitoring and alarms
+
+## Incidents Completed
+- [ ] #01: Web Server Down
+- [ ] #02: Database Unreachable
+- [ ] #03: High CPU Usage
+- [ ] #04: Disk Full
+- [ ] #05: ALB 502 Errors
+- [ ] #06: Auto Scaling Not Working
+
+## Skills Demonstrated
+- Systematic troubleshooting methodology
+- AWS service debugging (EC2, RDS, ALB, ASG)
+- Linux system administration
+- Incident documentation and reporting
+- Root cause analysis
+
+## Repository Structure
+```
+aws-incident-response-lab/
+├── README.md
+├── incidents/           # Individual incident reports
+├── runbooks/           # Troubleshooting guides and methodology
+├── scripts/            # Scripts to simulate failures
+└── screenshots/        # Evidence of investigation and resolution
+```
+
+---
