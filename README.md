@@ -13,15 +13,15 @@ This project simulates real-world AWS production incidents to develop and demons
 - Detailed incident documentation
 
 ## Infrastructure
-Using existing multi-tier AWS environment from Week 1:
+Using existing multi-tier AWS environment from aws-cloudwatch-monitoring repo:
 - VPC with multi-AZ subnets
 - Application Load Balancer
 - Auto Scaling Group (2-4 instances)
 - RDS MySQL database
 - CloudWatch monitoring and alarms
 
-## Incidents Completed
-- [ ] #01: Web Server Down
+## [Incidents Completed](incidents)
+- [x] #01: [Web Server Down](incidents/01-web-server-down.md)
 - [ ] #02: Database Unreachable
 - [ ] #03: High CPU Usage
 - [ ] #04: Disk Full
@@ -29,7 +29,7 @@ Using existing multi-tier AWS environment from Week 1:
 - [ ] #06: Auto Scaling Not Working
 
 ## Skills Demonstrated
-- Systematic troubleshooting methodology
+- Systematic troubleshooting
 - AWS service debugging (EC2, RDS, ALB, ASG)
 - Linux system administration
 - Incident documentation and reporting
@@ -39,7 +39,7 @@ Using existing multi-tier AWS environment from Week 1:
 ```
 aws-incident-response-lab/
 ├── README.md
-├── incidents/           # Individual incident reports
+├── incidents/          # Individual incident reports
 ├── runbooks/           # Troubleshooting guides and methodology
 ├── scripts/            # Scripts to simulate failures
 └── screenshots/        # Evidence of investigation and resolution
