@@ -21,7 +21,7 @@ Before simulating this incident, I suspended ASG auto-healing processes to preve
 
 ---
 
-### Timeline
+## Timeline
 
 ```
 17:03 UTC - Manually stopped Apache on i-0337d60bc8cb82e63 to begin simulation

@@ -1,2 +1,6 @@
 # Ignore personal scratch notes
 notes.md
+# Ignore incident template
+incidents/template.md
+# Ignore commands
+scripts/commands.sh
