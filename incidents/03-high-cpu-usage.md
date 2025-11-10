@@ -156,7 +156,7 @@ top
 
 Killed processes: `stress-ng-cpu`
 
-![Kill stress processes](03-pkill-i2.png)
+![Kill stress processes](../screenshots/03-pkill-i2.png)
 
 ### Verification
 
@@ -166,6 +166,7 @@ Monitored CloudWatch metrics for recovery:
 - Instance 1 CPU: Normal
 - Instance 2 CPU: Normal 
 - ASG average CPU: ~7% (below 75% threshold)
+
 ![Dashboard Normal](../screenshots/03-Dashboard-resolved.png)
 
 **5 minutes after:**
