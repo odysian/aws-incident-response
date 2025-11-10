@@ -21,19 +21,21 @@ Before simulating this incident, I suspended ASG auto-healing processes to preve
 
 ---
 
-## Timeline
+## Timeline (in UTC)
 
 ```
-17:03 UTC - Manually stopped Apache on i-0337d60bc8cb82e63 to begin simulation
-17:07 UTC - CloudWatch alarm triggered: `ASG-Single-Instance-Unhealthy`, received SNS email notification
-17:08 UTC - Began investigation, checked instance state
-17:10 UTC - SSM into instance, identified apache service stopped
-17:12 UTC - Checked service logs and resource metrics
-17:14 UTC - Restarted apache service, verified service running, tested application locally
-17:17 UTC - Health checks passing, target group shows healthy instance
-17:22 UTC - Monitored to confirm stability
-17:25 UTC - Re-enabled ASG auto-healing 
+17:03 - Manually stopped Apache on i-0337d60bc8cb82e63 to begin simulation
+17:07 - CloudWatch alarm triggered: `ASG-Single-Instance-Unhealthy`, received SNS email notification
+17:08 - Began investigation, checked instance state
+17:10 - SSM into instance, identified apache service stopped
+17:12 - Checked service logs and resource metrics
+17:14 - Restarted apache service, verified service running, tested application locally
+17:17 - Health checks passing, target group shows healthy instance
+17:22 - Monitored to confirm stability
+17:25 - Re-enabled ASG auto-healing 
 ```
+
+Total Duration: 22 minutes
 
 ---
 

@@ -38,17 +38,19 @@ aws ec2 modify-instance-credit-specification \
 
 ---
 
-## Timeline
+## Timeline (in UTC)
 
-**16:30 UTC** - Initiated stress tests on both instances
-**16:30 UTC** - Instance 1: stress-ng --cpu-load 100, Instance 2: stress-ng --cpu-load 80
-**16:33 UTC** - Cloudwatch alarm triggered, SNS notification received
-**16:34 UTC** - Check dashboard, ASG-level CPU utilization elevated
-**16:35 UTC** - Analyzed per-instance metrics, identified affected instances
-**16:36 UTC** - SSM to instances, found stress processes via `top`
-**16:38 UTC** - Killed stress proccesses on instance 1, then instance 2 using `pkill`
-**16:42 UTC** - Dashboard metrics returned to normal
-**16:43 UTC** - Cloudwatch alarm returned to `OK` state
+```
+16:30 - Initiated stress tests on both instances
+16:30 - Instance 1: stress-ng --cpu-load 100, Instance 2: stress-ng --cpu-load 80
+16:33 - Cloudwatch alarm triggered, SNS notification received
+16:34 - Check dashboard, ASG-level CPU utilization elevated
+16:35 - Analyzed per-instance metrics, identified affected instances
+16:36 - SSM to instances, found stress processes via `top`
+16:38 - Killed stress proccesses on instance 1, then instance 2 using `pkill`
+16:42 - Dashboard metrics returned to normal
+16:43 - Cloudwatch alarm returned to `OK` state
+```
 
 Total duration : ~15 minutes
 
@@ -57,7 +59,8 @@ Total duration : ~15 minutes
 ## Detection
 
 **How it was detected:**
-- Cloudwatch alarm triggered- ASG-High-CPU at 16:33 UTC
+- Cloudwatch alarm triggered at 16:33 UTC:
+    - ASG-High-CPU: >= 75% CPU utilization for 2 minutes
 - SNS email notification received
 - Dashboard showed elevated CPU usage across ASG
 
@@ -102,7 +105,7 @@ Output showed:
 
 Identified stress test processes as root cause
 
-![Instance 1 top](../screenshots/03-stress-i1.png)  
+![Instance 1 high cpu](../screenshots/03-stress-i1.png)  
 ![Grep stress processes](../screenshots/03-grep.png)
 
 ### Root Cause Analysis
@@ -156,7 +159,7 @@ top
 
 Killed processes: `stress-ng-cpu`
 
-![Kill stress processes](../screenshots/03-pkill-i2.png)
+![stress processes killed](../screenshots/03-pkill-i2.png)
 
 ### Verification
 
@@ -260,7 +263,9 @@ In production, sustained high CPU on t3 instances would either:
 - Require upgrading to larger instance types or compute-optimized instances
 - Trigger auto-scaling to add more instances
 
---- 
+---
+
+This incident showed how system-level resource saturation can degrade performance even when services remain healthy and the importance of proactive CPU monitoring and scaling policies.
 
 ## Metrics
 - Time to detect: 3 minutes

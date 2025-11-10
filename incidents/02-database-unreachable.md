@@ -20,21 +20,23 @@ Suspended processes:
 
 ---
 
-## Timeline
+## Timeline (in UTC)
 
-**21:31 UTC** - Removed RDS security group Inbound rule to begin simulation
-**21:33 UTC** - Dashboard showing unhealthy instances
-**21:35 UTC** - Both ASG-Single-Instance-Unhealthy + ASG-All-Instances-Unhealthy alarms trigger, SNS notifications received
-**21:37 UTC** - Verify RDS status: Available  
-**21:39 UTC** - SSM into instance, checked Apache logs: timeout errors found
-**21:40 UTC** - Test connectivity with netcat: timeout 
-**21:41 UTC** - Checked RDS security group: webapp-rds-sg missing MySQL/Aurora:3306 inbound rule from webapp-ec2-sg
-**21:42 UTC** - Add missing rule
-**21:43 UTC** - Verified connectivity with netcat: Connected 
-**21:43 UTC** - Tested MySQL connection: Successful
-**21:44 UTC** - Target group showing healthy instances
-**21:45 UTC** - Dashboard showing healthy instances
-**21:46 UTC** - Alarms return to OK state
+```
+21:31 - Removed RDS security group Inbound rule to begin simulation
+21:33 - Dashboard showing unhealthy instances
+21:35 - Both ASG-Single-Instance-Unhealthy + ASG-All-Instances-Unhealthy alarms trigger, SNS notifications received
+21:37 - Verify RDS status: Available  
+21:39 - SSM into instance, checked Apache logs: timeout errors found
+21:40 - Test connectivity with netcat: timeout 
+21:41 - Checked RDS security group: webapp-rds-sg missing MySQL/Aurora:3306 inbound rule from webapp-ec2-sg
+21:42 - Add missing rule
+21:43 - Verified connectivity with netcat: Connected 
+21:43 - Tested MySQL connection: Successful
+21:44 - Target group showing healthy instances
+21:45 - Dashboard showing healthy instances
+21:46 - Alarms return to OK state
+```
 
 Total duration: 15 minutes
 
