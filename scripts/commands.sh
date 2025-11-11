@@ -12,3 +12,7 @@ mysql -h database-cloudwatch-monitoring.c0fekuwkkx5w.us-east-1.rds.amazonaws.com
 
 # Check apache logs
 sudo tail -50 /var/log/httpd/error_log
+
+# Change instance setting to allow unlimited or standard bursting
+aws ec2 modify-instance-credit-specification \
+  --instance-credit-specifications InstanceId=i-0580dca4d1f9677db,CpuCredits=unlimited

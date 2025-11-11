@@ -15,13 +15,20 @@ DB_USER="admin"
 DB_PASS="odysbase69"
 DB_NAME="webapp"
 
-# === Wait for RDS to be reachable ===
+# === Wait for RDS to be reachable (with timeout) ===
+MAX_ATTEMPTS=30
+ATTEMPT=1
 echo "Waiting for RDS to be available..." | tee -a /var/log/user-data.log
-until mysql -h "$RDS_ENDPOINT" -u "$DB_USER" -p"$DB_PASS" -e "USE $DB_NAME;" 2>/dev/null; do
-    echo "$(date): RDS not ready yet, sleeping 10s..." | tee -a /var/log/user-data.log
+while ! mysql -h "$RDS_ENDPOINT" -u "$DB_USER" -p"$DB_PASS" -e "USE $DB_NAME;" 2>/dev/null; do
+    echo "$(date): RDS not ready (attempt $ATTEMPT/$MAX_ATTEMPTS), sleeping 10s..." | tee -a /var/log/user-data.log
+    ((ATTEMPT++))
+    if [ $ATTEMPT -gt $MAX_ATTEMPTS ]; then
+        echo "$(date): ERROR - RDS not reachable after $MAX_ATTEMPTS attempts" | tee -a /var/log/user-data.log
+        break
+    fi
     sleep 10
 done
-echo "$(date): RDS is reachable!" | tee -a /var/log/user-data.log
+echo "$(date): RDS check complete." | tee -a /var/log/user-data.log
 
 # === Create a simple status page ===
 cat > /var/www/html/index.php << EOF
@@ -69,12 +76,18 @@ echo "OK";
 ?>
 EOF
 
-# === Install CloudWatch Agent ===
-cd /tmp
-wget -q https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
-rpm -U ./amazon-cloudwatch-agent.rpm
+# === Ensure log files exist before CloudWatch Agent starts ===
+touch /var/log/httpd/access_log /var/log/httpd/error_log
+chown apache:apache /var/log/httpd/*.log
 
-# === CloudWatch Agent config with ASG aggregation ===
+# === Install CloudWatch Agent (prefers yum, fallback to manual rpm) ===
+yum install -y amazon-cloudwatch-agent || (
+  cd /tmp
+  wget -q https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+  rpm -U ./amazon-cloudwatch-agent.rpm
+)
+
+# === CloudWatch Agent config with ASG aggregation and root-only disk tracking ===
 cat > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json << 'EOF'
 {
   "agent": {
@@ -130,13 +143,21 @@ cat > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json << 'EOF'
 }
 EOF
 
-# === Start CloudWatch Agent ===
+# === Start and enable CloudWatch Agent ===
 /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 \
   -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s
+
+systemctl enable amazon-cloudwatch-agent
 
 # === Set permissions and restart Apache ===
 chown apache:apache /var/www/html/*.php
 chmod 644 /var/www/html/*.php
 systemctl restart httpd
 
+# === Optional cleanup and log rotation ===
+echo "0 4 * * * root find /tmp -type f -mtime +2 -delete" >> /etc/crontab
+
+# === Completion Log ===
+echo "----------------------------------------------" | tee -a /var/log/user-data.log
 echo "$(date): User data script completed successfully." | tee -a /var/log/user-data.log
+echo "----------------------------------------------" | tee -a /var/log/user-data.log

@@ -4,3 +4,5 @@ notes.md
 incidents/template.md
 # Ignore commands
 scripts/commands.sh
+# Future launch template
+/scripts.launch-templatev2.sh
