@@ -25,7 +25,7 @@ Using existing multi-tier AWS environment from aws-cloudwatch-monitoring repo:
 - [x] #02: [Database Unreachable](incidents/02-database-unreachable.md)
 - [x] #03: [High CPU Usage](incidents/03-high-cpu-usage.md)
 - [x] #04: [Disk Full](incidents/04-disk-space-alert.md)
-- [ ] #05: ALB 502 Errors
+- [x] #05: [ALB 502 Errors](incidents/05-alb-502-errors.md)
 - [ ] #06: Auto Scaling Not Working
 
 ## Skills Demonstrated
