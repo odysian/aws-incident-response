@@ -26,8 +26,8 @@ Using existing multi-tier AWS environment from aws-cloudwatch-monitoring repo:
 - [x] #03: [High CPU Usage](incidents/03-high-cpu-usage.md)
 - [x] #04: [Disk Full](incidents/04-disk-space-alert.md)
 - [x] #05: [ALB 502 Errors](incidents/05-alb-502-errors.md)
-- [ ] #06: Auto Scaling Not Working
-
+- [x] #06: [ASG Launch Failure](incidents/06-asg-launch-failure.md)
+- [ ] #07: CloudWatch Agent Failure
 ## Skills Demonstrated
 - Systematic troubleshooting
 - AWS service debugging (EC2, RDS, ALB, ASG)
