@@ -1,0 +1,167 @@
+# Incident #07: CloudWatch Agent Failure
+
+## Incident Summary
+**Date:** 2025-11-11 
+**Duration:** 7 minutes  
+**Severity:** Medium (monitoring blind spot, no impact to users)
+**Impact:** Loss of instance-level metrics (CPU, memory, disk) for one EC2 instance. Application continued serving traffic normally, but monitoring visibility was reduced.
+**Root Cause:** CloudWatch Agent service stopped unexpectedly, preventing metrics collection and transmission to CloudWatch.
+
+---
+
+## Pre-Incident Setup
+
+- ASG: Desired capacity 2, both instances healthy
+- CloudWatch Agent configured to collect system metrics (CPU, memory, disk, network)
+- Dashboard configured to display instance-level metrics
+
+**Monitoring configuration:**
+- CloudWatch Agent collecting metrics every 60 seconds
+- Dashboard showing real-time system metrics
+- No specific alarm for agent health (identified as gap)
+
+![Baseline dashboard metrics](../screenshots/07-baseline-dash.png)
+
+---
+
+## Timeline (in UTC)
+```
+22:56 - Simulated agent failure by stopping CloudWatch Agent service
+23:00 - Noticed missing data points on CloudWatch dashboard
+23:01 - SSM into instance, check agent status: inactive (dead)
+23:01 - Reviewed `systemctl status` and `journalctl` logs: confirmed service was stopped
+23:02 - Restarted CloudWatch Agent service
+23:03 - Verified service running and enabled for auto-start
+23:03 - Monitored dashboard for metric data to resume
+23:05 - First new data points appeared on dashboard
+```
+
+---
+
+## Detection
+
+- CloudWatch dashboard showed "no data" for instance metrics
+- Metrics flatlined at last reported value (22:55)
+- ALB and EC2-level metrics continued flowing normally (these don't require agent)
+- Application remained accessible and healthy
+
+![Metric missing Agent data](../screenshots/07-agent-stopped.png)
+
+---
+
+## Investigation Process
+
+**Connected to affected instance:**
+
+```bash
+# Checked agent service status
+sudo systemctl status amazon-cloudwatch-agent
+# Result: inactive (dead) since 22:56:31 UTC
+
+# Reviewed service logs
+sudo journalctl -u amazon-cloudwatch-agent -n 20
+# Found: "Stopped amazon-cloudwatch-agent.service"
+# No error messages indicating crash or failure
+```
+
+**Root Cause Analysis:**
+- Service stopped cleanly (not a crash)
+- No configuration errors in logs
+- No resource exhaustion (memory/disk)
+- Agent not running
+
+---
+
+## Resolution
+
+**Fix Applied:**
+```bash
+# Restart the CloudWatch Agent
+sudo systemctl start amazon-cloudwatch-agent
+
+# Verify service is running
+sudo systemctl status amazon-cloudwatch-agent
+# Active: active (running) 
+
+# Ensure agent starts on boot (prevent recurrence)
+sudo systemctl enable amazon-cloudwatch-agent
+
+
+# Verify agent process running
+ps aux | grep cloudwatch
+# Multiple cloudwatch agent processes visible
+```
+
+**Verification Steps:**
+1. Service status confirmed as "active (running)"
+2. Agent processes visible in process list
+3. Waited 2-3 minutes for next metric collection cycle
+4. Dashboard began showing new data points
+5. All configured metrics resumed flowing
+
+![Agent metrics reporting normally](../screenshots/07-agent-resolved.png)
+
+---
+
+## Lessons Learned
+
+### What Worked Well
+- Missing metrics were immediately visible on dashboard
+- Service status and logs provided definitive answer
+- Service restart restored full functionality
+
+
+### Areas For Improvement
+- Only detected issue by looking at dashboard
+- If agent stops, complete loss of OS-level visibility
+
+### Documentation Notes
+
+
+---
+
+## Prevention Strategies
+1. **Create CloudWatch alarm for agent health:**
+    - Monitor for missing metrics (no data points for 5+ minutes)
+    - Alert operations team when agent stops reporting
+2. **Add agent status to health checks:**
+    - Consider including agent health in application health check
+    - Or create separate monitoring for monitoring layer
+3. **Automated recovery:**
+    - Configure systemd to automatically restart agent on failure
+    - Add `Restart=on-failure` to service unit file
+4. **Metric-based alerting:**
+    - Create alarm that treats missing CloudWatch Agent data as breaching
+
+---
+
+## Technical Details
+
+
+**Affected Instances:** i-068628d24c3611dbd
+**Commands used:**
+```bash
+# Service management
+sudo systemctl status amazon-cloudwatch-agent
+sudo systemctl start amazon-cloudwatch-agent
+sudo systemctl enable amazon-cloudwatch-agent
+
+# Log analysis
+sudo journalctl -u amazon-cloudwatch-agent -n 20 --no-pager
+
+# Process verification
+ps aux | grep cloudwatch
+```
+
+**Agent logs location:**
+- Service logs: `sudo journalctl -u amazon-cloudwatch-agent`
+- Agent logs: `/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log`
+
+---
+
+## Metrics
+- Time to detect: 4 minutes
+- Time to identify root cause: 1 minute
+- Time to resolve: 1 minute
+- Time to verify: 3 minutes
+- Total incident duration: 9 minutes

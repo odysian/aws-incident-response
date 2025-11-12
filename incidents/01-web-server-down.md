@@ -160,7 +160,7 @@ Results:
 
 ### What Worked Well
 - Cloudwatch alarm provided immediate notification of the issue
-- In a prod environment with consistent traffic the 4XX error alarm would likely  trigger as well
+- In a prod environment with consistent traffic the 4XX error alarm would likely trigger as well
 - Investigation ruled out instance-level problems
 - Service restart was straightforward once cause was identified
 - Health checks automatically detected recovery

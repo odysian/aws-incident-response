@@ -2,7 +2,7 @@
 
 ## Incident Summary
 **Date:** 2025-11-10  
-**Duration:** [Will fill in at end]  
+**Duration:** 11 minutes 
 **Severity:** High  
 **Impact:** Single instance approaching disk capacity, risk of application failure  
 **Root Cause:** 5 GB log file (/var/log/app/old-access.log) consuming space on the root volume due to simulated unmonitored log growth.

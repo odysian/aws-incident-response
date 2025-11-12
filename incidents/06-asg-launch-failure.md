@@ -2,7 +2,7 @@
 
 ## Incident Summary
 **Date:** 2025-11-11  
-**Duration:** ~15 minutes
+**Duration:** 16 minutes
 **Severity:** High
 **Impact:** Auto Scaling Group failed to successfully launch new instances due to user data error in launch template.
 **Root Cause:** Typo in user data script (`httpdd` instead of `httpd`) causing bootstrap process to exit early, leaving the instance unconfigured.
