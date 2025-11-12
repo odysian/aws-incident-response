@@ -1,6 +1,6 @@
 # AWS Incident Response Lab
 
-Hands-on incident simulations designed to build real-world troubleshooting instincts for cloud operations.
+Hands-on AWS incident simulations designed to build real-world troubleshooting instincts for cloud operations.
 
 ## Overview
 This repository documents my journey building troubleshooting skills through simulated incidents. I intentionally broke a running AWS environment in multiple ways, then investigated and resolved each issue—documenting everything
@@ -33,7 +33,16 @@ This provided a realistic environment for simulating failure incidents across co
 | 06 | [ASG Launch Failure](incidents/06-asg-launch-failure.md) | Configuration | 16 min | Launch templates, user data errors, cloud-init logs |
 | 07 | [CloudWatch Agent Failure](incidents/07-cloudwatch-agent-failure.md) | Monitoring | 7 min | Agent troubleshooting, observability dependencies, systemd |
 
+
 **Total hands-on troubleshooting time:** ~2 hours across 7 incidents, additional time spent discovering possible preventative measures.
+
+## Project Stats
+
+- **Total Incidents:** 7 across 5 failure domains
+- **Hands-On Time:** ~15 hours (troubleshooting + documentation)
+- **AWS Resources Used:** EC2, ALB, RDS, ASG, CloudWatch Dashboard/Alarms/Agent
+- **Evidence:** 40+ screenshots documenting investigation and resolution
+- **AWS Cost:** $0 (Free Tier only)
 
 ## Skills Demonstrated
 
@@ -74,6 +83,10 @@ Each incident follows a consistent structure of incident reports:
 - **Additional Notes:** Notes include topics I learned about in the process of breaking and resolving the incidents
 - **Metrics:** Time to detect, identify root cause, resolve, and verify
 
+## Learning Approach
+
+I used AI tools like ChatGPT and Claude as guides for research and documentation, but all of the troubleshooting and validation happened in my own AWS environment. Every log, error, and fix in this repo came from real hands-on work.
+
 ## Troubleshooting Methodology
 
 I used a systematic approach for investigating incidents:
@@ -87,7 +100,7 @@ I used a systematic approach for investigating incidents:
 7. **Verify:** Watch metrics and logs to make sure everything's stable again
 8. **Document:** Write down what happened, what fixed it, and what to watch for next time.
 
-See [Troubleshooting Methodology](runbooks/troubleshooting-methodology.md).
+See [Troubleshooting Methodology](runbooks/troubleshooting.md).
 
 ## Key Takeaways
 
@@ -137,17 +150,12 @@ Through this project, I gained hands-on experience operating and troubleshooting
 
 This project demonstrates my ability to:
 
-**Run and maintain production-style systems** — EC2, RDS, ALB, and Auto Scaling Groups working together in a monitored environment.
-
-**Troubleshoot complex issues** across layers (infrastructure, networking, application, and monitoring).
-
-**Work through incidents methodically**, from detection to verification, while documenting each step.
-
-**Design and refine monitoring systems** using CloudWatch metrics, alarms, and dashboards.
-
-**Automate and validate configuration changes** through launch templates and user data scripts.
-
-**Reflect on failures** and turn them into actionable improvements and prevention strategies.
+- **Run and maintain production-style systems** — EC2, RDS, ALB, and Auto Scaling Groups working together in a monitored environment.
+- **Troubleshoot complex issues** across layers (infrastructure, networking, application, and monitoring).
+- **Work through incidents methodically**, from detection to verification, while documenting each step.
+- **Design and refine monitoring systems** using CloudWatch metrics, alarms, and dashboards.
+- **Automate and validate configuration changes** through launch templates and user data scripts.
+- **Reflect on failures** and turn them into actionable improvements and prevention strategies.
 
 These are real incidents I caused intentionally, investigated, and resolved using AWS services and Linux tools.
 
