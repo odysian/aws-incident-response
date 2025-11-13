@@ -33,10 +33,10 @@ else
 fi
 
 # === RDS connection info ===
-RDS_ENDPOINT="database-cloudwatch-monitoring.c0fekuwkkx5w.us-east-1.rds.amazonaws.com"
+RDS_ENDPOINT="<insert rds endpoint here>"
 DB_USER="admin"
-DB_PASS="odysbase69"
-DB_NAME="webapp"
+DB_PASS="password"
+DB_NAME="<insert db name here>"
 
 # === Wait for RDS to be reachable (with timeout) ===
 MAX_ATTEMPTS=30
